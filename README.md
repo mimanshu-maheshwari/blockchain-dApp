@@ -154,6 +154,22 @@ http://localhost:8545/ \
 -H "Content-Type: application/json"
 ```
 
+
+### Create and deploy smart contract with hardhat
+
+```bash 
+cd javascript-app
+npm run compile
+npm run deploy:besu
+```
+
+### Create a vite js app to interact with contract 
+
+```bash 
+cd frontend
+npm run dev
+```
+
 ## References: 
 - [dApp Architecture](https://github.com/gonzalobam/besu-network/blob/master/DAPP_ARCHITECTURE.md)
 - [Dapp Architecture Designs](https://github.com/ConsenSysMesh/Ethereum-Development-Best-Practices/wiki/Dapp-Architecture-Designs)

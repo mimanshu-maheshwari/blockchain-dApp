@@ -1,0 +1,30 @@
+{
+    "name": "dapp",
+    "version": "1.0.0",
+    "description": "- create the nodes: `setup.sh` - run `docker compose up` for running nodes - run checks:",
+    "main": "index.js",
+    "scripts": {
+        "compile": "hardhat compile",
+        "deploy:besu": "hardhat run scripts/deploy.js --network besu"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mimanshu-maheshwari/blockchain-dApp.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/mimanshu-maheshwari/blockchain-dApp/issues"
+    },
+    "homepage": "https://github.com/mimanshu-maheshwari/blockchain-dApp#readme",
+    "devDependencies": {
+        "@nomicfoundation/hardhat-ethers": "^4.0.14",
+        "hardhat": "^3.9.1"
+    },
+    "dependencies": {
+        "dotenv": "^17.4.2",
+        "ethers": "^6.17.0"
+    }
+}
