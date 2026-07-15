@@ -104,6 +104,21 @@ services:
       test-besu-network:
         ipv4_address: 172.16.239.15
 
+  # # docker image is not open
+  # explorer:
+  #   image: consensys/quorum-explorer:${QUORUM_EXPLORER_VERSION:-latest}
+  #   container_name: explorer
+  #   depends_on:
+  #     - rpcnode
+  #   volumes:
+  #     - ./quorum-explorer/config.json:/app/config.json:ro
+  #     - ./quorum-explorer/.env.production:/app/.env.production
+  #   ports:
+  #     - "25000:25000/tcp"
+  #   networks:
+  #     test-besu-network:
+  #       ipv4_address: 172.16.239.31
+
 networks:
   test-besu-network:
     name: test-besu-network

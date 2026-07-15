@@ -2,6 +2,60 @@
 
 ## Create a private chain
 
+### Using docker compose 
+- create the nodes: `setup.sh`
+- run `docker compose up` for running nodes
+- run checks: 
+
+```bash
+RPC=http://localhost:8545
+curl -X POST \
+    --data '{"jsonrpc":"2.0","method":"eth_blockNumber","params":[],"id":1}' \
+    http://localhost:8545 \
+    -H 'Content-Type: application/json' | jq
+
+curl -X POST \
+    --data '{"jsonrpc":"2.0","method":"qbft_getValidatorsByBlockNumber","params":["latest"],"id":1}' \
+    http://localhost:8545 \
+    -H 'Content-Type: application/json' | jq
+
+curl -X POST \
+    --data '{"jsonrpc":"2.0","method":"net_peerCount","params":[],"id":1}' \
+    http://localhost:8545 \
+    -H 'Content-Type: application/json' | jq
+
+
+curl -X POST \
+    --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["0xfe3b557e8fb62b89f4916b721be55ceb828dbd73","latest"],"id":1}' \
+    http://localhost:8545 \
+    -H "Content-Type: application/json" | jq
+
+curl -s -X POST "$RPC" \
+    -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_chainId","params":[],"id":1}' | jq
+
+curl -s -X POST "$RPC" \
+    -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"rpc_modules","params":[],"id":1}' | jq
+
+
+curl -s -X POST "$RPC" \
+    -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest",true],"id":1}' | jq
+
+curl -s -X POST "$RPC" \
+  -H "Content-Type: application/json" \
+  --data '{
+    "jsonrpc":"2.0",
+    "method":"eth_getLogs",
+    "params":[{
+      "fromBlock":"0x0",
+      "toBlock":"latest"
+    }],
+    "id":1
+  }' | jq
+```
+
 ### Process: 
 - Create a wallet with MetaMask
 - Create QBFT network using besu
