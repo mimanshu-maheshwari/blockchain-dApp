@@ -1,0 +1,113 @@
+x-besu-def: &besu-def
+  restart: "on-failure"
+  image: hyperledger/besu:${BESU_VERSION:-latest}
+  env_file:
+    - ./config/besu/.env
+  entrypoint:
+    - /bin/bash
+    - -c
+    - |
+      /opt/besu/bin/besu \
+      --config-file=/config/config.toml \
+      --p2p-host=$$(hostname -i) \
+      --nat-method=DOCKER \
+      --profile=ENTERPRISE
+
+services:
+  validator1:
+    <<: *besu-def
+    container_name: validator1
+    environment:
+      - SERVICE_NAME=validator1
+    labels:
+      - "consensus=besu"
+      - "node=validator"
+    volumes:
+      - ./config/besu:/config:ro
+      - ./config/nodes/validator1:/data
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.11
+
+  validator2:
+    <<: *besu-def
+    container_name: validator2
+    environment:
+      - SERVICE_NAME=validator2
+    labels:
+      - "consensus=besu"
+      - "node=validator"
+    depends_on:
+      - validator1
+    volumes:
+      - ./config/besu:/config:ro
+      - ./config/nodes/validator2:/data
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.12
+
+  validator3:
+    <<: *besu-def
+    container_name: validator3
+    environment:
+      - SERVICE_NAME=validator3
+    labels:
+      - "consensus=besu"
+      - "node=validator"
+    depends_on:
+      - validator1
+    volumes:
+      - ./config/besu:/config:ro
+      - ./config/nodes/validator3:/data
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.13
+
+  validator4:
+    <<: *besu-def
+    container_name: validator4
+    environment:
+      - SERVICE_NAME=validator4
+    labels:
+      - "consensus=besu"
+      - "node=validator"
+    depends_on:
+      - validator1
+    volumes:
+      - ./config/besu:/config:ro
+      - ./config/nodes/validator4:/data
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.14
+
+  rpcnode:
+    <<: *besu-def
+    container_name: rpcnode
+    environment:
+      - SERVICE_NAME=rpcnode
+    labels:
+      - "consensus=besu"
+      - "node=rpc"
+    depends_on:
+      - validator1
+      - validator2
+      - validator3
+      - validator4
+    volumes:
+      - ./config/besu:/config:ro
+      - ./config/nodes/rpcnode:/data
+    ports:
+      - "8545:8545/tcp"
+      - "8546:8546/tcp"
+      - "8547:8547/tcp"
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.15
+
+networks:
+  test-besu-network:
+    name: test-besu-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.239.0/24

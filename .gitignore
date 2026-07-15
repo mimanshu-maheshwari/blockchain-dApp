@@ -1,0 +1,17 @@
+# Generated Besu network artifacts
+config/nodes/
+config/besu/networkFiles/
+config/besu/genesis.json
+config/besu/static-nodes.json
+
+# Local env
+config/besu/.env
+
+# Logs
+logs/
+*.log
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/

@@ -1,0 +1,28 @@
+genesis-file="/config/genesis.json"
+node-private-key-file="/data/key"
+logging="INFO"
+data-path="/data"
+
+rpc-http-enabled=true
+rpc-http-host="0.0.0.0"
+rpc-http-port=8545
+rpc-http-api=["ETH","NET","WEB3","QBFT","ADMIN","TXPOOL","DEBUG","TRACE"]
+rpc-http-cors-origins=["*"]
+
+rpc-ws-enabled=true
+rpc-ws-host="0.0.0.0"
+rpc-ws-port=8546
+rpc-ws-api=["ETH","NET","WEB3","QBFT","ADMIN","TXPOOL","DEBUG","TRACE"]
+
+graphql-http-enabled=true
+graphql-http-host="0.0.0.0"
+graphql-http-port=8547
+graphql-http-cors-origins=["*"]
+
+host-allowlist=["*"]
+
+static-nodes-file="/config/static-nodes.json"
+discovery-enabled=true
+
+# permission-nodes-config-file-enabled=true 
+# permissions-nodes-config-file="/config/permissions_config.toml"
