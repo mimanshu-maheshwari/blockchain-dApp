@@ -6,6 +6,7 @@ config/besu/static-nodes.json
 
 # Local env
 config/besu/.env
+.env
 
 # Logs
 logs/
@@ -15,3 +16,7 @@ logs/
 .DS_Store
 .idea/
 .vscode/
+
+
+**/node_modules
+
