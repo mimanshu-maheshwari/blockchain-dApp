@@ -22,3 +22,8 @@ logs/
 
 javascript-app/artifacts
 javascript-app/cache
+javascript-app/frontend/src/SimpleStorage.json
+
+
+**/target
+**/build
