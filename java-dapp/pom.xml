@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.zeeve.dapp</groupId>
+  <artifactId>java-dapp</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <name>java-dapp</name>
+  <description>A simple java-dapp.</description>
+  <!-- FIXME change it to the project's website -->
+  <url>http://zeev.io/sample-java-dApp</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>21</java.version>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <web3j.version>4.14.0</web3j.version>
+  </properties>
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>2.0.17</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.web3j</groupId>
+      <artifactId>core</artifactId>
+      <version>${web3j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.web3j</groupId>
+      <artifactId>contracts</artifactId>
+      <version>${web3j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>  
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.4.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.12.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+        <!-- see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+          <!-- <configuration> -->
+          <!--   <release>${maven.compiler.release}</release> -->
+          <!-- </configuration> -->
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+          <configuration>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <mainClass>io.zeeve.dapp.App</mainClass>
+              </manifest>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.2</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>META-INF/versions/9/module-info.class</exclude>
+                    <exclude>module-info.class</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>io.zeeve.dapp.App</mainClass>
+                </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- plugins for compiling sol contracts  -->
+      <!-- https://kauri.io/#article/84475132317d4d6a84a2c42eb9348e4b/generate-a-java-wrapper-from-your-smart-contract -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.web3j</groupId> -->
+      <!--   <artifactId>web3j-maven-plugin</artifactId> -->
+      <!--   <version>5.0.2</version> -->
+      <!--   <executions> -->
+      <!--     <execution> -->
+      <!--       <id>generate-sources-web3j</id> -->
+      <!--       <phase>generate-sources</phase> -->
+      <!--       <goals> -->
+      <!--         <goal>generate-sources</goal> -->
+      <!--       </goals> -->
+      <!--       <configuration> -->
+      <!--         <packageName>io.zeeve.dapp.contracts.solidity</packageName> -->
+      <!--         <sourceDestination>${basedir}/target/generated-sources/contracts</sourceDestination> -->
+      <!-- <nativeJavaType>true</nativeJavaType> --> 
+      <!-- <outputFormat>java,bin</outputFormat> -->
+      <!--         <soliditySourceFiles> -->
+      <!--           <directory>${basedir}/src/main/resources/solidity</directory> -->
+      <!--           <includes> -->
+      <!--             <include>**/*.sol</include> -->
+      <!--           </includes> -->
+      <!--         </soliditySourceFiles> -->
+      <!-- <outputDirectory> --> 
+      <!--   <java>src/java/generated</java> --> 
+      <!--   <bin>src/bin/generated</bin> -->
+      <!--   <abi>src/abi/generated</abi> --> 
+      <!-- </outputDirectory> --> 
+      <!--       </configuration> -->
+      <!--     </execution> -->
+      <!--   </executions> -->
+      <!-- </plugin> -->
+      <!-- <plugin> -->
+      <!--   <groupId>org.codehaus.mojo</groupId> -->
+      <!--   <artifactId>build-helper-maven-plugin</artifactId> -->
+      <!--   <version>3.6.0</version> -->
+      <!--   <executions> -->
+      <!--     <execution> -->
+      <!--       <id>add-source</id> -->
+      <!--       <phase>generate-sources</phase> -->
+      <!--       <goals> -->
+      <!--         <goal>add-source</goal> -->
+      <!--       </goals> -->
+      <!--       <configuration> -->
+      <!--         <sources> -->
+      <!--           <source>${basedir}/target/generated-sources/contracts</source> -->
+      <!--         </sources> -->
+      <!--       </configuration> -->
+      <!--     </execution> -->
+      <!--   </executions> -->
+      <!-- </plugin> -->
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
+</project>
