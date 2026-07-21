@@ -19,6 +19,8 @@ graphql-http-host="0.0.0.0"
 graphql-http-port=8547
 graphql-http-cors-origins=["*"]
 
+Xrpc-ipc-enabled=true
+
 host-allowlist=["*"]
 
 static-nodes-file="/config/static-nodes.json"
