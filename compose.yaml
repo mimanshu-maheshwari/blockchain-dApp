@@ -56,6 +56,7 @@ services:
       - "node=validator"
     depends_on:
       - validator1
+      - push-gateway
     volumes:
       - ./config/besu:/config:ro
       - ./config/nodes/validator3:/data
@@ -63,8 +64,23 @@ services:
       test-besu-network:
         ipv4_address: 172.16.239.13
 
+  # for validator 4 making a push notification
   validator4:
     <<: *besu-def
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        /opt/besu/bin/besu \
+        --config-file=/config/config.toml \
+        --p2p-host=$$(hostname -i) \
+        --nat-method=DOCKER \
+        --metrics-push-enabled \
+        --metrics-push-port=9091 \
+        --metrics-push-host=push-gateway \
+        --metrics-enabled=false \
+        --profile=ENTERPRISE
+
     container_name: validator4
     environment:
       - SERVICE_NAME=validator4
@@ -126,6 +142,19 @@ services:
     networks:
       test-besu-network:
         ipv4_address: 172.16.239.16
+
+  push-gateway:
+    restart: "on-failure"
+    image: prom/pushgateway:${PROMETHEUS_PUSHGATEWAY_VERSION:-latest}
+    environment:
+      - SERVICE_NAME=prometheus-push-gateway
+    labels:
+      - "monitoring=prometheus"
+    ports: 
+      - "9091:9091"
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.17
 
   # # docker image is not open
   # explorer:

@@ -11,5 +11,11 @@ scrape_configs:
         - validator1:9545
         - validator2:9545
         - validator3:9545
-        - validator4:9545
+        # - validator4:9545
         - rpcnode:9545
+  - job_name: push-gateway
+    metrics_path: /metrics
+    scheme: http
+    static_configs:
+      - targets:
+        - push-gateway:9091
