@@ -36,12 +36,14 @@ require_command() {
 }
 
 generate_random_private_key() {
-  od -An -N32 -tx1 /dev/urandom | tr -d ' \n'
+  openssl rand -hex 32 | tr -d "\n" 
+  # od -An -N32 -tx1 /dev/urandom | tr -d ' \n'
 }
 
 log "Checking required tools"
 require_command "${BESU}"
-require_command od
+# require_command od
+require_command openssl
 require_command find
 require_command sort
 require_command tr
