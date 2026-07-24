@@ -1,8 +1,11 @@
 package io.zeeve.dapp;
 
 import java.io.IOException;
+import java.util.List;
 
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.EventEncoder;
+import org.web3j.abi.TypeEncoder;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -15,6 +18,7 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import io.zeeve.dapp.contracts.solidity.DocumentRegistry;
+import io.zeeve.dapp.contracts.solidity.DocumentRegistry.NotarizedEventResponse;
 
 public class App {
   public static void main(String[] args) {
@@ -61,28 +65,28 @@ public class App {
   }
 
   private static void checkNotarizedEvents(DocumentRegistry registryContract, TransactionReceipt receipt) {
-    var events = DocumentRegistry.getNotarizedEvents(receipt);
+    List<NotarizedEventResponse> events = DocumentRegistry.getNotarizedEvents(receipt);
     if (events == null) {
       return;
     }
-    for (var event : events) {
+    for (NotarizedEventResponse event : events) {
       final String notary = event._signer;
       final String documentHash = event._documentHash;
       System.out.println("Notary event: [Notary: %s, Hash: %s]".formatted(notary, documentHash));
     }
   }
 
+  @SuppressWarnings("unused")
   private static void checkNotarizedEvents(DocumentRegistry registryContract) {
 
     final EthFilter ethFilter = new EthFilter(DefaultBlockParameterName.EARLIEST, DefaultBlockParameterName.LATEST,
         registryContract.getContractAddress());
     ethFilter.addSingleTopic(EventEncoder.encode(DocumentRegistry.NOTARIZED_EVENT));
-    // ethFilter.addOptionalTopics("0x" + TypeEncoder.encode(new
-    // Address("0x00a329c0648769a73afac7f9381e08fb43dbea72")));
+    ethFilter.addOptionalTopics("0x" + TypeEncoder.encode(new Address("0x00a329c0648769a73afac7f9381e08fb43dbea72")));
     // registryContract.notarizedEventFlowable(DefaultBlockParameterName.EARLIEST,
     // DefaultBlockParameterName.LATEST)
     registryContract.notarizedEventFlowable(ethFilter)
-        .subscribe(event -> {
+        .subscribe((NotarizedEventResponse event) -> {
           final String notary = event._signer;
           final String documentHash = event._documentHash;
           System.out.println("Notary event: [Notary: %s, Hash: %s]".formatted(notary, documentHash));
