@@ -100,9 +100,32 @@ services:
       - "8545:8545/tcp"
       - "8546:8546/tcp"
       - "8547:8547/tcp"
+      - "9545:9545"
     networks:
       test-besu-network:
         ipv4_address: 172.16.239.15
+
+  prometheus:
+    restart: "on-failure"
+    image: prom/prometheus:${PROMETHEUS_VERSION:-latest}
+    environment:
+      - SERVICE_NAME=prometheus
+    volumes: 
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/prometheus-data:/prometheus
+    labels:
+      - "monitoring=prometheus"
+    ports: 
+      - "9090:9090"
+    depends_on:
+      - rpcnode
+      - validator1
+      - validator2
+      - validator3
+      - validator4
+    networks:
+      test-besu-network:
+        ipv4_address: 172.16.239.16
 
   # # docker image is not open
   # explorer:

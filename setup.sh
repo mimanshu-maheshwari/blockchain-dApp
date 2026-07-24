@@ -52,6 +52,28 @@ require_command rm
 require_command mkdir
 require_command chmod
 
+PROMETHEUS_DIR="${ROOT_DIR}/prometheus"
+PROMETHEUS_DATA_DIR="${PROMETHEUS_DIR}/prometheus-data"
+PROMETHEUS_CONFIG_FILE="${PROMETHEUS_DIR}/prometheus.yml"
+
+log "Setting Prometheus"
+
+if [[ -d "$PROMETHEUS_DATA_DIR" ]]; then
+  rm -rf "$PROMETHEUS_DATA_DIR"
+fi
+
+mkdir -p "$PROMETHEUS_DATA_DIR"
+
+# prom/prometheus usually runs as UID/GID 65534
+sudo chown -R 65534:65534 "$PROMETHEUS_DATA_DIR"
+
+# directory needs execute bit
+sudo chmod 755 "$PROMETHEUS_DATA_DIR"
+
+# Do we need to do this
+# sudo chown -R 65534:65534 "$PROMETHEUS_DATA_DIR"
+# sudo chmod -R u+rwX,g+rwX "$PROMETHEUS_DATA_DIR"
+
 log "Creating base directories"
 mkdir -p "${BESU_DIR}"
 mkdir -p "${NODES_DIR}"

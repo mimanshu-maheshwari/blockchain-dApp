@@ -27,3 +27,5 @@ javascript-app/frontend/src/SimpleStorage.json
 
 **/target
 **/build
+
+prometheus/prometheus-data/
